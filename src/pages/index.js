@@ -1,14 +1,19 @@
 import Image from "next/image"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useInView, useScroll, useTransform } from "framer-motion"
+import { useRef, useEffect } from "react"
 
 export default function Home() {
 
+  const ref = useRef(null)
+  const isInView = useInView(ref)
+
   let { scrollY } = useScroll()
   let y = useTransform(scrollY, [0, 1500], ["0%", "15%"])
+  let scale = useTransform(scrollY, [0, 1500], ["0%", "15%"])
 
   return (
     <>
-      <nav className="bg-[#F6E4D6] fixed top-0 w-full z-20">
+      <nav className="bg-[#F6E4D6] fixed top-0 w-full z-20 font-semibold">
         <div className="flex justify-between items-center h-28 max-w-[1300px] mx-auto">
           <div className="flex gap-20 ml-20">
             <span>Home</span>
@@ -32,15 +37,9 @@ export default function Home() {
       </nav>
       <div className="h-[112px]"></div>
       <header className="bg-[#F6E4D6]">
-        <div className="flex justify-around max-w-[1400px] mx-auto">
-          <div
-            transition={{
-              duration: 1,
-            }}
-            initial={{ translateX: "-100%" }}
-            whileInView={{ translateX: 0 }}
-            className="my-20">
-            <h1 className="font-bold text-4xl">Ti aiutiamo a scegliere <br />
+        <div className="flex justify-around max-w-[1400px] mx-auto drop-shadow-xl">
+          <div className="my-20 ">
+            <h1 className="font-bold text-4xl drop-shadow-lg">Ti aiutiamo a scegliere <br />
               le apparecchiature <br />
               e gli accessori piu’ idonei <br />
               per il tuo centro abbronzatura, <br />
@@ -60,13 +59,13 @@ export default function Home() {
         </div>
       </header>
       <section className="mx-auto max-w-[1500px]">
-        <h1 className="font-bold text-4xl text-center my-20">I NOSTRI PRODOTTI</h1>
+        <h1 className="font-bold text-4xl text-center my-20 drop-shadow-lg">I NOSTRI PRODOTTI</h1>
         <ul className="border-y-[1px] border-black flex justify-around py-8 mx-10 font-semibold text-lg">
-          <li>Solarium</li>
-          <li>Tecnologie</li>
-          <li>Assistenza</li>
-          <li>Progettazione</li>
-          <li>Ricambi UV</li>
+          <li className="translate-scale-product">Solarium</li>
+          <li className="translate-scale-product ">Tecnologie</li>
+          <li className="translate-scale-product ">Assistenza</li>
+          <li className="translate-scale-product ">Progettazione</li>
+          <li className="translate-scale-product ">Ricambi UV</li>
         </ul>
       </section>
       <section className="flex mt-24 mx-auto max-w-[1400px] justify-between">
@@ -83,18 +82,27 @@ export default function Home() {
             height={40}
             className="rounded mr-8 z-10 shadow-[0_0_36px_rgba(0,0,0,0.20)]"
           />
-        </motion.div>
+        </motion.div >
       </section>
       <section className="bg-[#F6E4D6] mt-[-230px] py-20">
         <div className="flex justify-between items-end mx-auto max-w-[1400px]">
-          <Image
-            src="/benyamin-bohlouli-LGXN4OSQSa4-unsplash.png"
-            alt="shop"
-            width={570}
-            height={40}
-            className="rounded mx-8 shadow-[0_0_36px_rgba(0,0,0,0.20)]"
-          />
-          <p className="max-w-2xl text-xl text-right mr-8">
+          <motion.div
+            ref={ref}
+            style={{
+              transform: isInView ? "none" : "translateX(-400px)",
+              opacity: isInView ? 1 : 0,
+              transition: "all cubic-bezier(0.17, 0.55, 0.55, 1) 1.5s"
+            }}
+          >
+            <Image
+              src="/benyamin-bohlouli-LGXN4OSQSa4-unsplash.png"
+              alt="shop"
+              width={570}
+              height={40}
+              className="rounded mx-8 shadow-[0_0_36px_rgba(0,0,0,0.20)]"
+            />
+          </motion.div>
+          <p className="max-w-xl text-xl text-right mr-8">
             Garantiamo la massima attenzione alla sicurezza e alla qualità dei nostri prodotti e servizi.
             <br /><br />
             Ogni apparecchiatura estetica viene testata e certificata per garantire il massimo risultato, minimizzando i rischi per la salute dei clienti.
